@@ -1,15 +1,56 @@
 ---
-title: "teste"
-listing:
-  contents: posts
-  feed: true
-  sort: "date desc"
-  type: default
-  categories: true
-  sort-ui: false
-  filter-ui: false
-page-layout: full
-title-block-banner: true
+title: "Psicoterapia acolhedora"
 ---
 
+# Bem-vindo(a)
 
+A psicoterapia oferece um espaço seguro para falar, elaborar e crescer. Aqui, cada encontro respeita o sigilo profissional: toda informação compartilhada é tratada com confidencialidade e cuidado.
+
+[Agendar por e-mail](mailto:seuemail@dominio.com){.btn .btn-primary .me-2}
+[Falar no WhatsApp](https://wa.me/5599999999999){.btn .btn-success target="_blank"}
+
+## Abordagens
+
+### Psicanálise
+Exploração profunda da história pessoal, padrões e desejos para compreender o que está por trás de sintomas e conflitos atuais.
+
+### Abordagem junguiana
+Foco em individuação, símbolos e arquétipos, integrando consciência e inconsciente para ampliar o sentido de si e da própria narrativa.
+
+### Testes psicológicos
+Uso de instrumentos validados para apoiar diagnóstico, planejamento terapêutico e acompanhamento do progresso.
+
+## Serviços
+
+### Sessões
+
+| Item                 | Detalhes                                  |
+|----------------------|-------------------------------------------|
+| Duração da sessão    | 50 minutos                                |
+| Frequência           | Semanal ou conforme necessidade clínica   |
+| Formato              | Presencial ou on-line com ambiente seguro |
+
+### Testes Psicológicos
+- Escala Brasileira de Burnout (EBBurn)
+- Escala de Avaliação da Impulsividade - Formas A e B (EsAvI-A e EsAvI-B)
+- Escala de Ideação Suicida Beck (BSS)
+- Escala de Desesperança Beck (BHS)
+- Inventário de Ansiedade de Beck (BAI)
+- Inventário de Depressão de Beck (BDI-II)
+- QUATI - Questionário de Avaliação Tipológica
+- Bateria Online de Inteligência Emocional (BOLIE)
+- Mini Exame do Estado Mental (MEEM)
+- BFP (Bateria Fatorial de Personalidade)
+- HTP (House-Tree-Person)
+
+## Como começar
+
+- **Contato inicial:** envie uma mensagem por e-mail ou WhatsApp para contar brevemente sua necessidade.
+- **Sessão de avaliação:** primeiro encontro para entender sua história, expectativas e definir objetivos.
+- **Plano terapêutico:** alinhamento sobre frequência, abordagem e, quando necessário, aplicação de testes.
+
+## Contato
+
+- E-mail: [seuemail@dominio.com](mailto:seuemail@dominio.com)
+- WhatsApp: [+55 (xx) xxxx-xxxx](https://wa.me/5599999999999){target="_blank"}
+- Atendimento com sigilo profissional e ambiente acolhedor, on-line ou presencial.

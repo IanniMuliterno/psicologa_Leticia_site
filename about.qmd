@@ -1,19 +1,12 @@
 ---
-title: "About"
-image: profile.jpg
-about:
-  template: jolla
-  links:
-    - icon: twitter
-      text: Twitter
-      href: https://twitter.com
-    - icon: linkedin
-      text: LinkedIn
-      href: https://linkedin.com
-    - icon: github
-      text: Github
-      href: https://github.com
-
+title: "Quem sou eu"
 ---
 
-About this blog
+Bem-vindos ao seu espaço de cuidado e transformação pessoal. 
+
+ Estou como Letícia Oliveira, psicóloga clínica em São Paulo, especializada em ansiedade, auto estima, autoconhecimento e bornout.
+ Minha prática é dedicada a oferecer um espaço acolhedor e uma abordagem que respeita seu ritmo.
+
+ 
+ Você merece seu espaço de autodescoberta. Vamos começar juntos? Agende sua primeira consulta gratuita inicial agora pelo WhatsApp ou formulário, o primeiro passo é mais simples do que imagina.
+
