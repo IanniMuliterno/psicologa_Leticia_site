@@ -968,6 +968,131 @@
             color: var(--brand-text-light);
         }
 
+        /* ===== TESTIMONIAL SUBMISSION FORM ===== */
+        .testimonial-form-section {
+            margin-top: var(--space-xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid oklch(0.25 0.02 60 / 0.08);
+            text-align: center;
+        }
+
+        .testimonial-form-toggle {
+            background: none;
+            border: 2px solid var(--brand-rose-deep);
+            color: var(--brand-rose-deep);
+            padding: 0.75rem 1.8rem;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.02em;
+        }
+
+        .testimonial-form-toggle:hover { background: var(--brand-rose-light); }
+
+        .testimonial-form-wrap {
+            display: none;
+            margin-top: var(--space-lg);
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .testimonial-form-wrap.open { display: block; }
+
+        .form-group { margin-bottom: var(--space-md); }
+
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--brand-text);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.01em;
+        }
+
+        .form-label .form-optional {
+            color: var(--brand-text-light);
+            font-weight: 400;
+            font-size: 0.78rem;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid oklch(0.25 0.02 60 / 0.15);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--brand-text);
+            background: var(--brand-white);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--brand-rose-deep);
+            box-shadow: 0 0 0 3px oklch(0.78 0.06 12 / 0.15);
+        }
+
+        .form-textarea {
+            min-height: 130px;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        .form-hp { display: none; }
+
+        .form-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--brand-green);
+            color: var(--brand-white);
+            border: none;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px oklch(0.38 0.06 160 / 0.25);
+        }
+
+        .form-submit:hover:not(:disabled) {
+            background: var(--brand-green-light);
+            transform: translateY(-2px);
+        }
+
+        .form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .form-message {
+            margin-top: var(--space-sm);
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            display: none;
+        }
+
+        .form-message.success {
+            display: block;
+            background: oklch(0.92 0.05 155);
+            color: oklch(0.30 0.08 155);
+            border: 1px solid oklch(0.75 0.08 155);
+        }
+
+        .form-message.error {
+            display: block;
+            background: oklch(0.95 0.03 15);
+            color: oklch(0.40 0.1 15);
+            border: 1px solid oklch(0.80 0.08 15);
+        }
+
         /* ===== FAQ SECTION ===== */
         .faq-section {
             padding: var(--space-2xl) 0;
@@ -1659,7 +1784,7 @@
                     Se eu te ajudei a alcançar seus objetivos, internos ou externos, sinta-se à vontade para me enviar seu depoimento e ajudar a mostrar o potencial transformador da Psicoterapia.
                 </p>
             </div>
-            <div class="testimonials-grid">
+            <div class="testimonials-grid" id="testimonials-container">
                 <div class="testimonial-card reveal stagger-1">
                     <div class="testimonial-stars">★★★★★</div>
                     <div class="testimonial-quote">"</div>
@@ -1700,6 +1825,52 @@
                             <div class="testimonial-detail">22 anos — Belo Horizonte</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Testimonial submission form -->
+            <div class="testimonial-form-section reveal stagger-4">
+                <button class="testimonial-form-toggle" id="toggle-form-btn" aria-expanded="false">
+                    Enviar meu depoimento
+                </button>
+                <div class="testimonial-form-wrap" id="testimonial-form-wrap" aria-hidden="true">
+                    <form id="testimonial-form" novalidate>
+                        <div class="form-group">
+                            <label class="form-label" for="t-name">
+                                Nome <span class="form-optional">(como prefere ser chamado/a)</span>
+                            </label>
+                            <input class="form-input" id="t-name" name="name" type="text"
+                                   placeholder="Ex.: Marina ou Anônimo"
+                                   maxlength="60" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="t-detail">
+                                Idade e cidade <span class="form-optional">(opcional)</span>
+                            </label>
+                            <input class="form-input" id="t-detail" name="detail" type="text"
+                                   placeholder="Ex.: 27 anos — Rio de Janeiro" maxlength="80">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="t-text">
+                                Seu depoimento <span class="form-optional">(até 1000 caracteres)</span>
+                            </label>
+                            <textarea class="form-textarea" id="t-text" name="text"
+                                      placeholder="Conte como a terapia impactou sua vida..."
+                                      maxlength="1000" required></textarea>
+                        </div>
+                        <!-- Honeypot: hidden from real users, bots fill it in -->
+                        <div class="form-hp" aria-hidden="true">
+                            <label for="t-hp">Não preencher</label>
+                            <input type="text" id="t-hp" name="hp" tabindex="-1" autocomplete="off">
+                        </div>
+                        <button type="submit" class="form-submit" id="form-submit-btn">
+                            Enviar depoimento
+                        </button>
+                        <p class="testimonials-consent" style="margin-top: var(--space-sm);">
+                            Seu depoimento será revisado antes de aparecer no site. Ao enviar, você autoriza a publicação.
+                        </p>
+                    </form>
+                    <div class="form-message" id="form-message" role="alert" aria-live="polite"></div>
                 </div>
             </div>
         </div>
@@ -1921,6 +2092,113 @@
                 }
             });
         });
+
+        // ===== DYNAMIC TESTIMONIALS =====
+        (function () {
+            const container = document.getElementById('testimonials-container');
+
+            function escHtml(s) {
+                return String(s || '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            function buildCard(t, index) {
+                const initial = (t.name || 'A').charAt(0).toUpperCase();
+                const stagger = ['stagger-1', 'stagger-2', 'stagger-3'][index % 3];
+                const detailHtml = t.detail
+                    ? `<div class="testimonial-detail">${escHtml(t.detail)}</div>`
+                    : '';
+                return `<div class="testimonial-card ${stagger}" style="opacity:1;transform:none;">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">${escHtml(t.text)}</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">${escHtml(initial)}</div>
+                        <div>
+                            <div class="testimonial-name">${escHtml(t.name)}</div>
+                            ${detailHtml}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            async function loadTestimonials() {
+                try {
+                    const res = await fetch('/.netlify/functions/get-testimonials');
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    if (!Array.isArray(data) || data.length === 0) return;
+                    container.innerHTML = data.map(buildCard).join('');
+                } catch (_) {
+                    // Network error — keep hardcoded fallback cards
+                }
+            }
+
+            loadTestimonials();
+        })();
+
+        // ===== TESTIMONIAL SUBMISSION FORM =====
+        (function () {
+            const toggleBtn = document.getElementById('toggle-form-btn');
+            const formWrap  = document.getElementById('testimonial-form-wrap');
+            const form      = document.getElementById('testimonial-form');
+            const submitBtn = document.getElementById('form-submit-btn');
+            const msgEl     = document.getElementById('form-message');
+
+            toggleBtn.addEventListener('click', () => {
+                const isOpen = formWrap.classList.toggle('open');
+                toggleBtn.setAttribute('aria-expanded', String(isOpen));
+                formWrap.setAttribute('aria-hidden', String(!isOpen));
+                if (isOpen) {
+                    formWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                msgEl.className = 'form-message';
+                msgEl.textContent = '';
+
+                const name   = document.getElementById('t-name').value;
+                const detail = document.getElementById('t-detail').value;
+                const text   = document.getElementById('t-text').value;
+                const hp     = document.getElementById('t-hp').value;
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enviando...';
+
+                try {
+                    const res = await fetch('/.netlify/functions/submit-testimonial', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, detail, text, hp }),
+                    });
+
+                    const data = await res.json().catch(() => ({}));
+
+                    if (res.ok && data.success) {
+                        form.reset();
+                        formWrap.classList.remove('open');
+                        toggleBtn.setAttribute('aria-expanded', 'false');
+                        msgEl.className = 'form-message success';
+                        msgEl.textContent = 'Obrigada pelo seu depoimento! Ele será revisado e publicado em breve.';
+                        msgEl.style.display = 'block';
+                    } else {
+                        msgEl.className = 'form-message error';
+                        msgEl.textContent = data.error || 'Ocorreu um erro. Por favor, tente novamente.';
+                    }
+                } catch (_) {
+                    msgEl.className = 'form-message error';
+                    msgEl.textContent = 'Falha de conexão. Verifique sua internet e tente novamente.';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Enviar depoimento';
+                }
+            });
+        })();
     </script>
 
     <!-- Structured Data for SEO/AEO -->
