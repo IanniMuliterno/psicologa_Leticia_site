@@ -2,6 +2,7 @@ project:
   type: website
   resources:
     - artifacts/
+    - admin/
 
 website:
   title: "LETÍCIA OLIVERA<br><small>psicóloga</small>"

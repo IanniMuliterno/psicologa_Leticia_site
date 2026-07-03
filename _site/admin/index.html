@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Painel Admin — Letícia Oliveira</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-rose: oklch(0.78 0.06 12);
+            --brand-rose-light: oklch(0.92 0.03 12);
+            --brand-rose-deep: oklch(0.65 0.09 12);
+            --brand-green: oklch(0.38 0.06 160);
+            --brand-green-light: oklch(0.45 0.06 160);
+            --brand-ivory: oklch(0.97 0.008 80);
+            --brand-cream: oklch(0.94 0.015 80);
+            --brand-dark: oklch(0.25 0.02 60);
+            --brand-text: oklch(0.30 0.02 60);
+            --brand-text-light: oklch(0.50 0.015 60);
+            --brand-white: oklch(0.99 0.002 90);
+            --brand-shadow: oklch(0.25 0.02 60 / 0.08);
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--brand-text);
+            background: var(--brand-ivory);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== HEADER ===== */
+        .admin-header {
+            background: var(--brand-white);
+            border-bottom: 1px solid oklch(0.25 0.02 60 / 0.08);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-header h1 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--brand-dark);
+        }
+
+        .admin-header p {
+            font-size: 0.75rem;
+            color: var(--brand-text-light);
+            margin-top: 0.1rem;
+        }
+
+        .btn-logout {
+            background: none;
+            border: 1px solid oklch(0.25 0.02 60 / 0.2);
+            color: var(--brand-text-light);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover { background: var(--brand-cream); color: var(--brand-dark); }
+
+        /* ===== AUTH SCREEN ===== */
+        #auth-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: var(--brand-white);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 4px 24px var(--brand-shadow);
+            text-align: center;
+        }
+
+        .auth-card .logo {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--brand-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .auth-card .logo-sub {
+            font-size: 0.8rem;
+            color: var(--brand-rose-deep);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 2rem;
+        }
+
+        .auth-card h2 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+            color: var(--brand-text);
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid oklch(0.25 0.02 60 / 0.15);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--brand-text);
+            background: var(--brand-ivory);
+            margin-bottom: 0.75rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--brand-rose-deep);
+            box-shadow: 0 0 0 3px oklch(0.78 0.06 12 / 0.15);
+        }
+
+        .btn-enter {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--brand-rose-deep);
+            color: var(--brand-white);
+            border: none;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-enter:hover { background: oklch(0.58 0.10 12); }
+
+        #auth-error {
+            margin-top: 0.75rem;
+            font-size: 0.82rem;
+            color: oklch(0.40 0.1 15);
+        }
+
+        /* ===== ADMIN CONTENT ===== */
+        #admin-screen { display: none; }
+
+        .admin-main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .admin-section {
+            margin-bottom: 3rem;
+        }
+
+        .admin-section h2 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--brand-dark);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .count-badge {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--brand-rose-light);
+            color: var(--brand-rose-deep);
+            padding: 0.2rem 0.6rem;
+            border-radius: 100px;
+        }
+
+        .count-badge.approved { background: oklch(0.90 0.04 155); color: oklch(0.30 0.08 155); }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--brand-white);
+            border-radius: var(--radius-lg);
+            border: 1px dashed oklch(0.25 0.02 60 / 0.12);
+            color: var(--brand-text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ===== TESTIMONIAL CARDS ===== */
+        .t-card {
+            background: var(--brand-white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid oklch(0.25 0.02 60 / 0.07);
+        }
+
+        .t-card-text {
+            font-style: italic;
+            font-size: 0.92rem;
+            line-height: 1.8;
+            color: var(--brand-text);
+            margin-bottom: 0.75rem;
+        }
+
+        .t-card-meta {
+            font-size: 0.78rem;
+            color: var(--brand-text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .t-card-meta strong {
+            color: var(--brand-dark);
+            font-weight: 600;
+        }
+
+        .t-card-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .btn-approve, .btn-reject {
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-approve {
+            background: var(--brand-green);
+            color: var(--brand-white);
+        }
+
+        .btn-approve:hover:not(:disabled) { background: var(--brand-green-light); }
+
+        .btn-reject {
+            background: none;
+            border: 1px solid oklch(0.25 0.02 60 / 0.2);
+            color: var(--brand-text-light);
+        }
+
+        .btn-reject:hover:not(:disabled) {
+            background: oklch(0.95 0.03 15);
+            border-color: oklch(0.80 0.08 15);
+            color: oklch(0.40 0.1 15);
+        }
+
+        .btn-approve:disabled, .btn-reject:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--brand-text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .auth-card { padding: 2rem 1.5rem; }
+            .admin-main { padding: 1.5rem 1rem; }
+            .t-card { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+    <div class="auth-card">
+        <div class="logo">Letícia Oliveira</div>
+        <div class="logo-sub">Psicóloga</div>
+        <h2>Painel de Depoimentos</h2>
+        <input
+            type="password"
+            id="secret-input"
+            class="auth-input"
+            placeholder="Senha do painel"
+            autocomplete="current-password"
+        >
+        <button class="btn-enter" id="enter-btn">Entrar</button>
+        <p id="auth-error" hidden>Senha incorreta. Por favor, tente novamente.</p>
+    </div>
+</div>
+
+<!-- ADMIN SCREEN -->
+<div id="admin-screen">
+    <header class="admin-header">
+        <div>
+            <h1>Painel Admin</h1>
+            <p>Depoimentos de clientes</p>
+        </div>
+        <button class="btn-logout" id="logout-btn">Sair</button>
+    </header>
+
+    <main class="admin-main">
+        <section class="admin-section">
+            <h2>
+                Pendentes
+                <span class="count-badge" id="pending-count">0</span>
+            </h2>
+            <div id="pending-list">
+                <div class="loading">Carregando...</div>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <h2>
+                Aprovados
+                <span class="count-badge approved" id="approved-count">0</span>
+            </h2>
+            <div id="approved-list">
+                <div class="loading">Carregando...</div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    let SECRET = localStorage.getItem('admin_secret');
+
+    const authScreen  = document.getElementById('auth-screen');
+    const adminScreen = document.getElementById('admin-screen');
+    const authError   = document.getElementById('auth-error');
+
+    function showAdmin() {
+        authScreen.style.display = 'none';
+        adminScreen.style.display = 'block';
+        loadData();
+    }
+
+    function clearAuth(showError) {
+        localStorage.removeItem('admin_secret');
+        SECRET = null;
+        authScreen.style.display = 'flex';
+        adminScreen.style.display = 'none';
+        if (showError) {
+            authError.hidden = false;
+            authError.textContent = 'Senha incorreta ou expirada. Por favor, tente novamente.';
+        }
+    }
+
+    // Auto-login if key is saved
+    if (SECRET) showAdmin();
+
+    document.getElementById('enter-btn').addEventListener('click', () => {
+        const val = document.getElementById('secret-input').value.trim();
+        if (!val) return;
+        SECRET = val;
+        localStorage.setItem('admin_secret', val);
+        authError.hidden = true;
+        loadData(); // test if secret is valid
+    });
+
+    document.getElementById('secret-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('enter-btn').click();
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => clearAuth(false));
+
+    async function apiFetch(method, body) {
+        const res = await fetch('/.netlify/functions/admin-api', {
+            method,
+            headers: {
+                'Authorization': `Bearer ${SECRET}`,
+                'Content-Type': 'application/json',
+            },
+            body: body ? JSON.stringify(body) : undefined,
+        });
+
+        if (res.status === 401) {
+            clearAuth(true);
+            return null;
+        }
+
+        return res.json();
+    }
+
+    function fmtDate(iso) {
+        return new Date(iso).toLocaleDateString('pt-BR', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        });
+    }
+
+    function escHtml(s) {
+        return String(s || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function renderPending(list) {
+        const el = document.getElementById('pending-list');
+        const badge = document.getElementById('pending-count');
+        badge.textContent = list.length;
+
+        if (list.length === 0) {
+            el.innerHTML = '<div class="empty-state">Nenhum depoimento pendente.</div>';
+            return;
+        }
+
+        el.innerHTML = list.map(t => `
+            <div class="t-card" id="card-${escHtml(t.id)}">
+                <p class="t-card-text">"${escHtml(t.text)}"</p>
+                <p class="t-card-meta"><strong>${escHtml(t.name)}</strong>${t.detail ? ` — ${escHtml(t.detail)}` : ''}</p>
+                <p class="t-card-meta">Enviado em: ${fmtDate(t.submittedAt)}</p>
+                <div class="t-card-actions">
+                    <button class="btn-approve" onclick="doAction('approve', '${escHtml(t.id)}', this)">Aprovar ✓</button>
+                    <button class="btn-reject"  onclick="doAction('reject',  '${escHtml(t.id)}', this)">Rejeitar ✗</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderApproved(list) {
+        const el = document.getElementById('approved-list');
+        const badge = document.getElementById('approved-count');
+        badge.textContent = list.length;
+
+        if (list.length === 0) {
+            el.innerHTML = '<div class="empty-state">Nenhum depoimento aprovado ainda.</div>';
+            return;
+        }
+
+        el.innerHTML = list.map(t => `
+            <div class="t-card">
+                <p class="t-card-text">"${escHtml(t.text)}"</p>
+                <p class="t-card-meta"><strong>${escHtml(t.name)}</strong>${t.detail ? ` — ${escHtml(t.detail)}` : ''}</p>
+                <p class="t-card-meta">Aprovado em: ${fmtDate(t.approvedAt)}</p>
+            </div>
+        `).join('');
+    }
+
+    async function loadData() {
+        authScreen.style.display = 'none';
+        adminScreen.style.display = 'block';
+
+        const data = await apiFetch('GET');
+        if (!data) return; // 401 handled by apiFetch
+
+        renderPending(data.pending || []);
+        renderApproved(data.approved || []);
+    }
+
+    async function doAction(action, id, btn) {
+        const card = document.getElementById(`card-${id}`);
+        const btns = card.querySelectorAll('button');
+        btns.forEach(b => b.disabled = true);
+        btn.textContent = action === 'approve' ? 'Aprovando...' : 'Rejeitando...';
+
+        const result = await apiFetch('POST', { action, id });
+        if (!result) return;
+
+        if (result.success) {
+            card.style.transition = 'opacity 0.3s';
+            card.style.opacity = '0';
+            setTimeout(() => loadData(), 350);
+        } else {
+            btns.forEach(b => b.disabled = false);
+            btn.textContent = action === 'approve' ? 'Aprovar ✓' : 'Rejeitar ✗';
+            alert('Erro: ' + (result.error || 'Tente novamente.'));
+        }
+    }
+</script>
+</body>
+</html>
