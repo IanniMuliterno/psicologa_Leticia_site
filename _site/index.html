@@ -873,13 +873,55 @@
             line-height: 1.7;
         }
 
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-md);
+        .testimonials-carousel {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
+        .carousel-btn {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--brand-white);
+            border: 1px solid oklch(0.25 0.02 60 / 0.12);
+            box-shadow: 0 2px 8px var(--brand-shadow);
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: var(--brand-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .carousel-btn:hover:not(:disabled) {
+            background: var(--brand-rose-light);
+            border-color: var(--brand-rose);
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.25;
+            cursor: default;
+        }
+
+        .testimonials-grid {
+            flex: 1;
+            display: flex;
+            gap: var(--space-md);
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            padding-bottom: 4px;
+        }
+
+        .testimonials-grid::-webkit-scrollbar { display: none; }
+
         .testimonial-card {
+            flex: 0 0 calc((100% - var(--space-md) * 2) / 3);
+            scroll-snap-align: start;
             background: var(--brand-white);
             border-radius: var(--radius-lg);
             padding: var(--space-lg);
@@ -1454,8 +1496,8 @@
                 gap: var(--space-md);
             }
 
-            .testimonials-grid {
-                grid-template-columns: 1fr;
+            .testimonial-card {
+                flex: 0 0 85%;
             }
 
             .footer-bottom {
@@ -1785,7 +1827,11 @@
                     Se eu te ajudei a alcançar seus objetivos, internos ou externos, sinta-se à vontade para me enviar seu depoimento e ajudar a mostrar o potencial transformador da Psicoterapia.
                 </p>
             </div>
-            <div class="testimonials-grid" id="testimonials-container"></div>
+            <div class="testimonials-carousel">
+                <button class="carousel-btn" id="carousel-prev" aria-label="Depoimento anterior" disabled>&#8249;</button>
+                <div class="testimonials-grid" id="testimonials-container"></div>
+                <button class="carousel-btn" id="carousel-next" aria-label="Próximo depoimento">&#8250;</button>
+            </div>
 
             <!-- Testimonial submission form -->
             <div class="testimonial-form-section reveal stagger-4">
@@ -2072,14 +2118,13 @@
                     .replace(/"/g, '&quot;');
             }
 
-            function buildCard(t, index) {
+            function buildCard(t) {
                 const initial = (t.name || 'A').charAt(0).toUpperCase();
-                const stagger = ['stagger-1', 'stagger-2', 'stagger-3'][index % 3];
                 const detailHtml = t.detail
                     ? `<div class="testimonial-detail">${escHtml(t.detail)}</div>`
                     : '';
                 const stars = '★'.repeat(Math.min(5, Math.max(1, t.stars || 5)));
-                return `<div class="testimonial-card ${stagger}" style="opacity:1;transform:none;">
+                return `<div class="testimonial-card">
                     <div class="testimonial-stars">${stars}</div>
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">${escHtml(t.text)}</p>
@@ -2100,10 +2145,31 @@
                     const data = await res.json();
                     if (!Array.isArray(data)) return;
                     container.innerHTML = data.map(buildCard).join('');
+                    updateCarouselBtns();
                 } catch (_) {
                     // Network error — leave container empty
                 }
             }
+
+            // Carousel navigation
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+
+            function updateCarouselBtns() {
+                prevBtn.disabled = container.scrollLeft <= 1;
+                nextBtn.disabled = container.scrollLeft + container.clientWidth >= container.scrollWidth - 1;
+            }
+
+            function scrollByCard(dir) {
+                const card = container.querySelector('.testimonial-card');
+                if (!card) return;
+                const gap = parseFloat(getComputedStyle(container).gap) || 0;
+                container.scrollBy({ left: dir * (card.offsetWidth + gap), behavior: 'smooth' });
+            }
+
+            prevBtn.addEventListener('click', () => scrollByCard(-1));
+            nextBtn.addEventListener('click', () => scrollByCard(1));
+            container.addEventListener('scroll', updateCarouselBtns, { passive: true });
 
             loadTestimonials();
         })();
