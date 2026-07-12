@@ -15,7 +15,7 @@ export default async (req) => {
 
     const sorted = testimonials
       .filter(Boolean)
-      .sort((a, b) => new Date(a.approvedAt) - new Date(b.approvedAt));
+      .sort((a, b) => new Date(a.approvedAt || 0) - new Date(b.approvedAt || 0));
 
     return new Response(JSON.stringify(sorted), {
       headers: {

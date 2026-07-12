@@ -1,4 +1,5 @@
 import { getStore } from "@netlify/blobs";
+import { timingSafeEqual } from "crypto";
 
 function denied() {
   return new Response(JSON.stringify({ error: "Não autorizado." }), {
@@ -16,9 +17,13 @@ function jsonResponse(data, status = 200) {
 
 export default async (req) => {
   const secret = process.env.ADMIN_SECRET;
-  if (!secret || req.headers.get("Authorization") !== `Bearer ${secret}`) {
-    return denied();
-  }
+  const provided = req.headers.get("Authorization") || "";
+  const expected = `Bearer ${secret}`;
+  const safe =
+    secret &&
+    provided.length === expected.length &&
+    timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
+  if (!safe) return denied();
 
   const store = getStore({ name: "testimonials", consistency: "strong" });
 
@@ -71,14 +76,15 @@ export default async (req) => {
         return jsonResponse({ error: "Depoimento não encontrado." }, 404);
       }
 
+      // Delete pending first — prevents duplicates if the approve write fails
+      await store.delete(pendingKey);
+
       if (action === "approve") {
         await store.setJSON(`approved/${id}`, {
           ...entry,
           approvedAt: new Date().toISOString(),
         });
       }
-
-      await store.delete(pendingKey);
 
       return jsonResponse({ success: true });
     } catch (err) {

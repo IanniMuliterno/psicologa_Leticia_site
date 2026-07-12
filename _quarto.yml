@@ -5,7 +5,7 @@ project:
     - admin/
 
 website:
-  title: "LETÍCIA OLIVERA<br><small>psicóloga</small>"
+  title: "LETÍCIA OLIVEIRA<br><small>psicóloga</small>"
   navbar:
     left:
       - href: index.html

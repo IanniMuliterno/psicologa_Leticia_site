@@ -10,6 +10,8 @@
     <meta property="og:title" content="Psicóloga Letícia Oliveira — Terapia Online para Jovens e Adultos">
     <meta property="og:description" content="Você não precisa dar conta de tudo sozinho(a). Terapia online acolhedora para ansiedade, autoestima e autoconhecimento.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://psicologaleticiaoliveira.netlify.app/">
+    <meta property="og:image" content="https://psicologaleticiaoliveira.netlify.app/artifacts/picture1.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -91,17 +93,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--space-md);
-        }
-
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0,0,0,0);
-            border: 0;
         }
 
         /* ===== REVEAL ANIMATIONS ===== */
@@ -227,10 +218,10 @@
             color: var(--brand-white) !important;
             padding: 0.6rem 1.4rem;
             border-radius: 100px;
-            font-size: 0.82rem !important;
-            font-weight: 600 !important;
+            font-size: 0.82rem;
+            font-weight: 600;
             letter-spacing: 0.04em;
-            transition: background 0.3s ease, transform 0.3s ease !important;
+            transition: background 0.3s ease, transform 0.3s ease;
         }
 
         .nav-cta::after {
@@ -774,9 +765,6 @@
             color: oklch(0.80 0.03 160);
         }
 
-        .step-divider {
-            display: none;
-        }
 
         /* ===== WHAT'S INSIDE SECTION ===== */
         .inside-section {
@@ -1977,7 +1965,7 @@
                     <h4>Contato</h4>
                     <ul>
                         <li><a href="https://wa.me/553599215858" target="_blank" rel="noopener">WhatsApp</a></li>
-                        <li><a href="psi.leticiaoliveira.0312@gmail.com">E-mail</a></li>
+                        <li><a href="mailto:psi.leticiaoliveira.0312@gmail.com">E-mail</a></li>
                     </ul>
                 </div>
             </div>
@@ -2011,7 +1999,6 @@
 
         // ===== NAVBAR SCROLL =====
         const nav = document.querySelector('.nav');
-        let lastScroll = 0;
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
@@ -2020,7 +2007,6 @@
             } else {
                 nav.classList.remove('scrolled');
             }
-            lastScroll = currentScroll;
         }, { passive: true });
 
         // ===== MOBILE MENU =====
@@ -2046,7 +2032,6 @@
             button.addEventListener('click', () => {
                 const item = button.parentElement;
                 const isActive = item.classList.contains('active');
-                const expanded = button.getAttribute('aria-expanded') === 'true';
 
                 // Close all
                 document.querySelectorAll('.faq-item').forEach(i => {
@@ -2216,6 +2201,8 @@
         "name": "Psicóloga Letícia Oliveira",
         "description": "Psicóloga clínica especializada em terapia online para jovens e adultos. Atendimento para ansiedade, autoestima, conflitos familiares e autoconhecimento.",
         "url": "https://psicologaleticiaoliveira.netlify.app/",
+        "telephone": "+55-35-99215858",
+        "image": "https://psicologaleticiaoliveira.netlify.app/artifacts/picture1.jpg",
         "serviceType": "Psicoterapia Online",
         "areaServed": "BR",
         "priceRange": "$$",

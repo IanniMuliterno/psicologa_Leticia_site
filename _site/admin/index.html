@@ -342,7 +342,7 @@
 </div>
 
 <script>
-    let SECRET = localStorage.getItem('admin_secret');
+    let SECRET = sessionStorage.getItem('admin_secret');
 
     const authScreen  = document.getElementById('auth-screen');
     const adminScreen = document.getElementById('admin-screen');
@@ -355,7 +355,7 @@
     }
 
     function clearAuth(showError) {
-        localStorage.removeItem('admin_secret');
+        sessionStorage.removeItem('admin_secret');
         SECRET = null;
         authScreen.style.display = 'flex';
         adminScreen.style.display = 'none';
@@ -372,7 +372,7 @@
         const val = document.getElementById('secret-input').value.trim();
         if (!val) return;
         SECRET = val;
-        localStorage.setItem('admin_secret', val);
+        sessionStorage.setItem('admin_secret', val);
         authError.hidden = true;
         loadData(); // test if secret is valid
     });
@@ -431,6 +431,7 @@
             <div class="t-card" id="card-${escHtml(t.id)}">
                 <p class="t-card-text">"${escHtml(t.text)}"</p>
                 <p class="t-card-meta"><strong>${escHtml(t.name)}</strong>${t.detail ? ` — ${escHtml(t.detail)}` : ''}</p>
+                <p class="t-card-meta">${'★'.repeat(Math.min(5, Math.max(1, t.stars || 5)))}</p>
                 <p class="t-card-meta">Enviado em: ${fmtDate(t.submittedAt)}</p>
                 <div class="t-card-actions">
                     <button class="btn-approve" onclick="doAction('approve', '${escHtml(t.id)}', this)">Aprovar ✓</button>
@@ -454,6 +455,7 @@
             <div class="t-card">
                 <p class="t-card-text">"${escHtml(t.text)}"</p>
                 <p class="t-card-meta"><strong>${escHtml(t.name)}</strong>${t.detail ? ` — ${escHtml(t.detail)}` : ''}</p>
+                <p class="t-card-meta">${'★'.repeat(Math.min(5, Math.max(1, t.stars || 5)))}</p>
                 <p class="t-card-meta">Aprovado em: ${fmtDate(t.approvedAt)}</p>
             </div>
         `).join('');
@@ -465,6 +467,11 @@
 
         const data = await apiFetch('GET');
         if (!data) return; // 401 handled by apiFetch
+        if (data.error) {
+            document.getElementById('pending-list').innerHTML = `<div class="empty-state">Erro ao carregar: ${escHtml(data.error)}</div>`;
+            document.getElementById('approved-list').innerHTML = '';
+            return;
+        }
 
         renderPending(data.pending || []);
         renderApproved(data.approved || []);
