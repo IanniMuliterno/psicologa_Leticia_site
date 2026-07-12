@@ -1,4 +1,4 @@
 [build]
-  command = "cp index.html _site/index.html && mkdir -p _site/admin && cp admin/index.html _site/admin/index.html"
+  base = "."
   publish = "_site"
   functions = "netlify/functions"
