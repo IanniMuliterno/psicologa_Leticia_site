@@ -1049,6 +1049,19 @@
 
         .form-hp { display: none; }
 
+        .star-picker { display: flex; gap: 0.1rem; margin-top: 0.35rem; }
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: oklch(0.85 0 0);
+            cursor: pointer;
+            padding: 0 0.05rem;
+            line-height: 1;
+            transition: color 0.1s;
+        }
+        .star-btn.active { color: oklch(0.75 0.15 80); }
+
         .form-submit {
             width: 100%;
             padding: 1rem;
@@ -1784,49 +1797,7 @@
                     Se eu te ajudei a alcançar seus objetivos, internos ou externos, sinta-se à vontade para me enviar seu depoimento e ajudar a mostrar o potencial transformador da Psicoterapia.
                 </p>
             </div>
-            <div class="testimonials-grid" id="testimonials-container">
-                <div class="testimonial-card reveal stagger-1">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <div class="testimonial-quote">"</div>
-                    <p class="testimonial-text">
-                        Eu tinha muita resistência com terapia, achava que não era pra mim. A Letícia me fez sentir acolhida desde a primeira sessão. Hoje consigo lidar muito melhor com minha ansiedade.
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">M</div>
-                        <div>
-                            <div class="testimonial-name">Marina</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card reveal stagger-2">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <div class="testimonial-quote">"</div>
-                    <p class="testimonial-text">
-                        Estava num momento muito difícil com minha família e não sabia como lidar. A terapia me ajudou a entender meus limites e a me comunicar melhor. Mudou minha vida.
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">A</div>
-                        <div>
-                            <div class="testimonial-name">Anonimo</div>
-                            <div class="testimonial-detail">27 anos — Rio de Janeiro</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card reveal stagger-3">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <div class="testimonial-quote">"</div>
-                    <p class="testimonial-text">
-                        Comecei a terapia sem saber muito o que esperar. Hoje me conheço muito mais, entendo meus padrões e me sinto mais segura nas minhas escolhas. Super recomendo a Letícia!
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">A</div>
-                        <div>
-                            <div class="testimonial-name">Anonima</div>
-                            <div class="testimonial-detail">22 anos — Belo Horizonte</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="testimonials-grid" id="testimonials-container"></div>
 
             <!-- Testimonial submission form -->
             <div class="testimonial-form-section reveal stagger-4">
@@ -1849,6 +1820,17 @@
                             </label>
                             <input class="form-input" id="t-detail" name="detail" type="text"
                                    placeholder="Ex.: 27 anos — Rio de Janeiro" maxlength="80">
+                        </div>
+                        <div class="form-group">
+                            <span class="form-label">Avaliação</span>
+                            <div class="star-picker" id="star-picker" role="group" aria-label="Selecione a avaliação">
+                                <button type="button" class="star-btn" data-value="1" aria-label="1 estrela">★</button>
+                                <button type="button" class="star-btn" data-value="2" aria-label="2 estrelas">★</button>
+                                <button type="button" class="star-btn" data-value="3" aria-label="3 estrelas">★</button>
+                                <button type="button" class="star-btn" data-value="4" aria-label="4 estrelas">★</button>
+                                <button type="button" class="star-btn" data-value="5" aria-label="5 estrelas">★</button>
+                            </div>
+                            <input type="hidden" id="t-stars" value="5">
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="t-text">
@@ -2111,8 +2093,9 @@
                 const detailHtml = t.detail
                     ? `<div class="testimonial-detail">${escHtml(t.detail)}</div>`
                     : '';
+                const stars = '★'.repeat(Math.min(5, Math.max(1, t.stars || 5)));
                 return `<div class="testimonial-card ${stagger}" style="opacity:1;transform:none;">
-                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-stars">${stars}</div>
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">${escHtml(t.text)}</p>
                     <div class="testimonial-author">
@@ -2130,10 +2113,10 @@
                     const res = await fetch('/.netlify/functions/get-testimonials');
                     if (!res.ok) return;
                     const data = await res.json();
-                    if (!Array.isArray(data) || data.length === 0) return;
+                    if (!Array.isArray(data)) return;
                     container.innerHTML = data.map(buildCard).join('');
                 } catch (_) {
-                    // Network error — keep hardcoded fallback cards
+                    // Network error — leave container empty
                 }
             }
 
@@ -2147,6 +2130,29 @@
             const form      = document.getElementById('testimonial-form');
             const submitBtn = document.getElementById('form-submit-btn');
             const msgEl     = document.getElementById('form-message');
+
+            // Star picker
+            const starPicker   = document.getElementById('star-picker');
+            const starsInput   = document.getElementById('t-stars');
+            const starBtns     = [...starPicker.querySelectorAll('.star-btn')];
+            let selectedStars  = 5;
+
+            function paintStars(upTo) {
+                starBtns.forEach(b => b.classList.toggle('active', +b.dataset.value <= upTo));
+            }
+            paintStars(5);
+            starPicker.addEventListener('mouseover', e => {
+                const b = e.target.closest('.star-btn');
+                if (b) paintStars(+b.dataset.value);
+            });
+            starPicker.addEventListener('mouseleave', () => paintStars(selectedStars));
+            starPicker.addEventListener('click', e => {
+                const b = e.target.closest('.star-btn');
+                if (!b) return;
+                selectedStars = +b.dataset.value;
+                starsInput.value = selectedStars;
+                paintStars(selectedStars);
+            });
 
             toggleBtn.addEventListener('click', () => {
                 const isOpen = formWrap.classList.toggle('open');
@@ -2166,6 +2172,7 @@
                 const detail = document.getElementById('t-detail').value;
                 const text   = document.getElementById('t-text').value;
                 const hp     = document.getElementById('t-hp').value;
+                const stars  = starsInput.value;
 
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Enviando...';
@@ -2174,7 +2181,7 @@
                     const res = await fetch('/.netlify/functions/submit-testimonial', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name, detail, text, hp }),
+                        body: JSON.stringify({ name, detail, text, hp, stars }),
                     });
 
                     const data = await res.json().catch(() => ({}));

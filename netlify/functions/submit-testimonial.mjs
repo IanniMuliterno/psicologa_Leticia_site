@@ -20,7 +20,7 @@ export default async (req) => {
     );
   }
 
-  const { name, text, detail, hp } = body;
+  const { name, text, detail, hp, stars } = body;
 
   // Honeypot: bots fill this field; real users don't see it
   if (hp) {
@@ -49,6 +49,7 @@ export default async (req) => {
     name: name.trim().slice(0, MAX_NAME),
     detail: (detail || "").trim().slice(0, MAX_DETAIL),
     text: text.trim().slice(0, MAX_TEXT),
+    stars: Math.min(5, Math.max(1, parseInt(stars, 10) || 5)),
     submittedAt: new Date().toISOString(),
   };
 
