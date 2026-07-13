@@ -2244,6 +2244,19 @@
                         msgEl.className = 'form-message success';
                         msgEl.textContent = 'Obrigada pelo seu depoimento! Ele será revisado e publicado em breve.';
                         msgEl.style.display = 'block';
+
+                        if (!hp) {
+                            fetch('https://api.web3forms.com/submit', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    access_key: '8b344d65-001c-49ed-baea-0f81b72dacbf',
+                                    subject: 'Novo depoimento pendente de aprovação',
+                                    from_name: 'Site Letícia Oliveira',
+                                    message: `De: ${name}\n${detail ? `(${detail})\n` : ''}\n${text}\n\nAcesse o painel para aprovar: https://psicologaleticiaoliveira.netlify.app/admin/`,
+                                }),
+                            }).catch(() => {});
+                        }
                     } else {
                         msgEl.className = 'form-message error';
                         msgEl.textContent = data.error || 'Ocorreu um erro. Por favor, tente novamente.';

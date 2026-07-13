@@ -64,30 +64,8 @@ export default async (req) => {
     );
   }
 
-  // Best-effort email notification via Web3Forms (optional)
-  const web3Key = process.env.WEB3FORMS_KEY;
-  if (web3Key) {
-    try {
-      const web3Res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: web3Key,
-          subject: "Novo depoimento pendente de aprovação",
-          from_name: "Site Letícia Oliveira",
-          message: `De: ${entry.name}\n${entry.detail ? `(${entry.detail})\n` : ""}\n${entry.text}\n\nAcesse o painel para aprovar: https://psicologaleticiaoliveira.netlify.app/admin/`,
-        }),
-      });
-      const web3Body = await web3Res.json().catch(() => null);
-      if (!web3Res.ok || !web3Body?.success) {
-        console.error("web3forms notification failed:", web3Res.status, web3Body);
-      }
-    } catch (err) {
-      console.error("web3forms notification error:", err);
-    }
-  } else {
-    console.warn("WEB3FORMS_KEY not set; skipping email notification");
-  }
+  // Email notification is sent client-side (Web3Forms blocks server-side
+  // calls without a paid plan + IP whitelist), see testimonial-form handler.
 
   return new Response(JSON.stringify({ success: true }), {
     status: 200,
