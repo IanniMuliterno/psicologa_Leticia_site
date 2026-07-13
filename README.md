@@ -91,5 +91,4 @@ netlify.toml                  publish dir, functions dir
 npm install
 netlify dev            # serves _site/ + functions locally, needs Netlify CLI + linked site for env vars
 ```
-
 To edit the homepage: edit `index.html` **and** copy the same change into `_site/index.html` before committing.
