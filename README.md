@@ -30,8 +30,6 @@ That means `_site/` is a **pre-rendered, committed artifact**, not something Net
 
 This is a deliberate tradeoff for a low-traffic brochure site (no CI build minutes, no build-time surprises) at the cost of manual sync discipline.
 
-> The site originally started as a [Quarto](https://quarto.org/) project (`_quarto.yml`, `about.qmd`, `posts/*.qmd`) before becoming a single hand-authored `index.html`. Those files were unlinked from the live homepage and untouched since the initial build-out, so they — and their rendered output in `_site/` — were removed.
-
 ## Testimonials feature
 
 The one genuinely dynamic feature on the site: visitors can submit a testimonial, which is held for manual approval before it's shown publicly.
