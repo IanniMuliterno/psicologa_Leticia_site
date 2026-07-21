@@ -910,6 +910,7 @@
         .testimonials-grid {
             flex: 1;
             display: flex;
+            align-items: flex-start;
             gap: var(--space-md);
             overflow-x: auto;
             scroll-snap-type: x mandatory;
@@ -947,8 +948,44 @@
             font-size: 0.92rem;
             line-height: 1.8;
             color: var(--brand-text);
-            margin-bottom: var(--space-md);
+            margin-bottom: var(--space-sm);
             font-style: italic;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+        }
+
+        .testimonial-text.expanded {
+            display: block;
+            -webkit-line-clamp: unset;
+            overflow: visible;
+        }
+
+        .testimonial-toggle {
+            display: none;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0 0 var(--space-sm);
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--brand-rose-deep);
+            cursor: pointer;
+        }
+
+        .testimonial-toggle.visible {
+            display: inline-block;
+        }
+
+        .testimonial-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .testimonial-toggle:focus-visible {
+            outline: 3px solid var(--brand-rose);
+            outline-offset: 2px;
         }
 
         .testimonial-author {
@@ -1499,6 +1536,10 @@
             .testimonial-card {
                 flex: 0 0 85%;
             }
+
+            /* No separate line-clamp override needed here: this card is wider
+               than the desktop 3-up card, so the same clamp count shows an
+               equal-or-more generous preview. */
 
             .footer-bottom {
                 flex-direction: column;
@@ -2128,6 +2169,7 @@
                     <div class="testimonial-stars">${stars}</div>
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">${escHtml(t.text)}</p>
+                    <button type="button" class="testimonial-toggle" aria-expanded="false">Leia mais</button>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">${escHtml(initial)}</div>
                         <div>
@@ -2138,6 +2180,15 @@
                 </div>`;
             }
 
+            function markOverflowingTestimonials() {
+                container.querySelectorAll('.testimonial-text').forEach(p => {
+                    const btn = p.nextElementSibling;
+                    if (btn && btn.classList.contains('testimonial-toggle')) {
+                        btn.classList.toggle('visible', p.scrollHeight > p.clientHeight + 1);
+                    }
+                });
+            }
+
             async function loadTestimonials() {
                 try {
                     const res = await fetch('/.netlify/functions/get-testimonials');
@@ -2145,6 +2196,7 @@
                     const data = await res.json();
                     if (!Array.isArray(data)) return;
                     container.innerHTML = data.map(buildCard).join('');
+                    markOverflowingTestimonials();
                     updateCarouselBtns();
                 } catch (_) {
                     // Network error — leave container empty
@@ -2170,6 +2222,15 @@
             prevBtn.addEventListener('click', () => scrollByCard(-1));
             nextBtn.addEventListener('click', () => scrollByCard(1));
             container.addEventListener('scroll', updateCarouselBtns, { passive: true });
+
+            container.addEventListener('click', (e) => {
+                const btn = e.target.closest('.testimonial-toggle');
+                if (!btn) return;
+                const text = btn.previousElementSibling;
+                const isExpanded = text.classList.toggle('expanded');
+                btn.textContent = isExpanded ? 'Mostrar menos' : 'Leia mais';
+                btn.setAttribute('aria-expanded', String(isExpanded));
+            });
 
             loadTestimonials();
         })();
